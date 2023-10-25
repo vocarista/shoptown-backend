@@ -4,7 +4,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "products")
 public class Product {
-    private ObjectId _id;
+    private String _id;
     private String title;
     private double price;
     private String description;
@@ -12,11 +12,11 @@ public class Product {
     private String image;
     private Rating rating;
 
-    public ObjectId get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(ObjectId _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 

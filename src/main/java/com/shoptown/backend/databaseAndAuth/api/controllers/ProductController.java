@@ -1,7 +1,6 @@
 package com.shoptown.backend.databaseAndAuth.api.controllers;
 
 import com.shoptown.backend.databaseAndAuth.api.models.Product;
-import com.shoptown.backend.databaseAndAuth.api.repo.ProductRepository;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
