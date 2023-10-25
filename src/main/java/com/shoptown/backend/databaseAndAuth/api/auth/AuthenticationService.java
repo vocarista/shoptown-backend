@@ -4,6 +4,7 @@ import com.shoptown.backend.databaseAndAuth.api.models.User;
 import com.shoptown.backend.databaseAndAuth.api.repo.UserRepository;
 import com.shoptown.backend.databaseAndAuth.config.JwtService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
