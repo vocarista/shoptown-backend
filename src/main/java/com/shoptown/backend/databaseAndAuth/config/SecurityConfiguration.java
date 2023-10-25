@@ -1,5 +1,7 @@
 package com.shoptown.backend.databaseAndAuth.config;
 
+import com.shoptown.backend.databaseAndAuth.api.models.User;
+import com.shoptown.backend.databaseAndAuth.api.repo.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -27,7 +31,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/user/auth/login", "/user/auth/register", "/products", "/").permitAll()
+                                .requestMatchers("/user/auth/authenticate", "/user/auth/register", "/products", "/").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)
@@ -38,5 +42,16 @@ public class SecurityConfiguration {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public UserDetailsService customUserDetailsService(UserRepository userRepository) {
+        return username -> {
+            User user = userRepository.findByUsername(username);
+            if (user == null) {
+                throw new UsernameNotFoundException("User not found");
+            }
+            return user;
+        };
     }
 }

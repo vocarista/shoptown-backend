@@ -6,4 +6,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserRepository extends MongoRepository<UserDetails, String> {
     User findByUsername(String username);
+
+    boolean existsByUsername(String username);
 }

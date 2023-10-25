@@ -20,7 +20,7 @@ import javax.annotation.processing.Generated;
 @Getter
 @Setter
 @ToString
-@Document(collection = "users")
+@Document(collection = "userDetails")
 @Builder
 public class User implements UserDetails {
     @Id
@@ -32,7 +32,7 @@ public class User implements UserDetails {
     private List<String> wishlist;
     private List<String> orderlist;
     private List<String> cartlist;
-    private String role;
+    private String role = "ROLE_USER";
     private String email;
     private String phone;
     private Date dob;

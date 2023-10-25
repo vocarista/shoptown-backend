@@ -29,7 +29,7 @@ public class CartController {
         this.userRepository=userRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<List<String>> getCart(@RequestBody String token) {
         String username = jwtService.extractUsername(token);
         User user = userRepository.findByUsername(username);
