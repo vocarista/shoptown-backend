@@ -3,6 +3,7 @@ package com.shoptown.backend.databaseAndAuth.api.auth;
 import com.shoptown.backend.databaseAndAuth.api.models.User;
 import com.shoptown.backend.databaseAndAuth.api.repo.UserRepository;
 import com.shoptown.backend.databaseAndAuth.config.JwtService;
+import com.shoptown.backend.databaseAndAuth.service.BlackListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +20,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
+    private final BlackListService blackListService;
 
     public AuthenticationResponse register(RegisterRequest request) {
         // Check if a user with the same username already exists.
@@ -78,5 +80,10 @@ public class AuthenticationService {
 
         // Return the response.
         return AuthenticationResponse.builder().token(jwtToken).build();
+    }
+
+    public String logout(LogoutRequest request) {
+        blackListService.addToBlackList(request.getToken());
+        return "Logged out successfully";
     }
 }

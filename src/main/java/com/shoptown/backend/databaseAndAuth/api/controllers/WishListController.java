@@ -2,8 +2,8 @@ package com.shoptown.backend.databaseAndAuth.api.controllers;
 
 import com.shoptown.backend.databaseAndAuth.api.models.CartProduct;
 import com.shoptown.backend.databaseAndAuth.api.models.DeleteRequest;
-import com.shoptown.backend.databaseAndAuth.api.models.OrderProduct;
 import com.shoptown.backend.databaseAndAuth.api.models.User;
+import com.shoptown.backend.databaseAndAuth.api.models.WishlistProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -19,47 +19,49 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/user/orders")
-public class OrderController {
+@RequestMapping("/user/wishlist")
+public class WishListController {
     private final MongoTemplate mongoTemplate;
-
     @Autowired
-    public OrderController(MongoTemplate mongoTemplate) {
+    public WishListController(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 
     @GetMapping("")
-    public ResponseEntity<List<OrderProduct>> getCart(@AuthenticationPrincipal UserDetails userDetails) {
+    public ResponseEntity<List<WishlistProduct>> getCart(@AuthenticationPrincipal UserDetails userDetails) {
         String username = userDetails.getUsername();
         Query query = new Query(Criteria.where("username").is(username));
         User user = mongoTemplate.findOne(query, User.class);
         assert user != null;
-        List<OrderProduct> orderlist = user.getOrderlist();
+        List<WishlistProduct> wishlist = user.getWishlist();
 
-        if (orderlist == null) {
-            orderlist = new ArrayList<OrderProduct>();
-            Update update = new Update().set("orderlist", orderlist);
+        if (wishlist == null) {
+            wishlist = new ArrayList<>();
+            Update update = new Update().set("wishlist", wishlist);
             mongoTemplate.updateFirst(query, update, User.class);
         }
-        return ResponseEntity.ok(orderlist);
+
+        return ResponseEntity.ok(wishlist);
     }
 
-    @PostMapping("/add-to-orders")
-    public ResponseEntity<String> addItem(@AuthenticationPrincipal UserDetails userDetails, @RequestBody OrderProduct request) {
+    @PostMapping("/add-to-wishlist")
+    public ResponseEntity<String> addItem(@AuthenticationPrincipal UserDetails userDetails, @RequestBody WishlistProduct request) {
         String username = userDetails.getUsername();
         Query query = new Query(Criteria.where("username").is(username));
         User user = mongoTemplate.findOne(query, User.class);
         assert user != null;
-        List<OrderProduct> orderlist = user.getOrderlist();
+        List<WishlistProduct> wishlist = user.getWishlist();
 
-        if (orderlist == null) {
-            orderlist = new ArrayList<OrderProduct>();
+        if (wishlist == null) {
+            wishlist = new ArrayList<>();
         }
-        orderlist.add(request);
-        Update update = new Update().set("orderlist", orderlist);
-        mongoTemplate.updateFirst(query, update, User.class);
 
-        return ResponseEntity.ok("Product added to orders");
+        if (!wishlist.contains(request))
+            wishlist.add(request);
+
+        Update update = new Update().set("wishlist", wishlist);
+        mongoTemplate.updateFirst(query, update, User.class);
+        return ResponseEntity.ok("Product added to wishlist");
     }
 
     @PostMapping("/remove")
@@ -68,9 +70,9 @@ public class OrderController {
         Query query = new Query(Criteria.where("uername").is(username));
         User user = mongoTemplate.findOne(query, User.class);
         assert user != null;
-        List<OrderProduct> orderlist = user.getOrderlist();
-        orderlist.removeIf(item -> Objects.equals(item.getProductId(), request.getProductId()));
-        Update update = new Update().set("order", orderlist);
+        List<WishlistProduct> wishlist = user.getWishlist();
+        wishlist.removeIf(item -> Objects.equals(item.getProductId(), request.getProductId()));
+        Update update = new Update().set("wishlist", wishlist);
         mongoTemplate.updateFirst(query, update, User.class);
         return ResponseEntity.ok("Product deleted successfully");
     }

@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .disable()
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/user/auth/authenticate", "/user/auth/register", "/products", "/").permitAll()
+                                .requestMatchers("/user/auth/authenticate", "/user/auth/register", "/products").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)

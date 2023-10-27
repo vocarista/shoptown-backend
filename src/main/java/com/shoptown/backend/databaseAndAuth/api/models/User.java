@@ -29,13 +29,15 @@ public class User implements UserDetails {
     private String lastname;
     private String username;
     private String password;
-    private List<String> wishlist;
-    private List<String> orderlist;
-    private List<String> cartlist;
+    private List<WishlistProduct> wishlist;
+    private List<OrderProduct> orderlist;
+    private List<CartProduct> cartlist;
     private String role = "ROLE_USER";
     private String email;
     private String phone;
     private Date dob;
+    private List<Address> shippingList;
+    private Address billingAddress;
 
     public User(String firstname, String lastname, String username, String password) {
         this.firstname = firstname;

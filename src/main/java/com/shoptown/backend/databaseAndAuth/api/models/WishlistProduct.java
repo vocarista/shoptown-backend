@@ -7,9 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class ProductRequest {
-    private String token;
+@AllArgsConstructor
+public class WishlistProduct {
     private String productId;
 }
