@@ -1,12 +1,44 @@
-FROM ubuntu:latest AS build
-RUN apt-get update
-RUN apt-get install openjdk-17-jdk -y
-COPY . .
-RUN ./gradlew bootJar --no-daemon
+# Establish a base image with OpenJDK 17
+FROM openjdk:17-jdk-slim AS base
 
-FROM openjdk:17.0.1-jdk-slim
+# Set the working directory
+WORKDIR /app
+
+# Copy the necessary gradle files to the container
+COPY gradlew build.gradle settings.gradle ./
+
+# Copy the gradle folder to the container
+COPY gradle/ gradle/
+
+# Copy the actual source code of the application
+COPY src/ src/
+
+# Resolve the Gradle dependencies
+RUN ./gradlew build --no-daemon
+
+# Development stage
+FROM base AS  development
+
+# Command to run the Spring boot application
+CMD ["./gradlew", "bootRun"]
+
+# Build stage
+FROM base AS build
+
+# Build the Spring Boot application
+RUN ./gradlew build --no-daemon
+
+# Production Stage
+FROM openjdk:17-oracle AS production
+
+# Set the working directory
+WORKDIR /app
+
+# Expose the port
 EXPOSE 7120
 
-COPY --from=build /build/libs/databaseAndAuth.0.0.1-SNAPSHOT.jar app.jar
+# Copy the built JAR file
+COPY --from=build /app/build/libs/databaseAndAuth-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java", "-Dspring.data.mongodb.uri=${MONGODB_URI}", "-jar", "app.jar"]
+# Command to run the Spring Boot Server
+CMD ["java", "-Dspring.data.mongodb.uri=${MONGODB_URI}", "-jar", "app.jar"]
