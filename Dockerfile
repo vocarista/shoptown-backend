@@ -35,7 +35,7 @@ FROM openjdk:17-oracle AS production
 WORKDIR /app
 
 # Expose the port
-EXPOSE 7120
+EXPOSE 8080
 
 # Copy the built JAR file
 COPY --from=build /app/build/libs/databaseAndAuth-0.0.1-SNAPSHOT.jar app.jar
