@@ -14,6 +14,7 @@ COPY gradle/ gradle/
 COPY src/ src/
 
 # Resolve the Gradle dependencies
+RUN chmod +x /app/gradlew
 RUN ./gradlew build --no-daemon
 
 # Development stage
