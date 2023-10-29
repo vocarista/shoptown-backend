@@ -32,7 +32,7 @@ public class BlackListService {
         return mongoTemplate.exists(query, BlackListToken.class);
     }
 
-    @Scheduled(cron = "0 0 0 * * ?")
+    @Scheduled(cron = "0 0 3 * * ?")
     public void cleanupBlackList() {
         List<BlackListToken> blackListTokens = mongoTemplate.findAll(BlackListToken.class);
         blackListTokens.forEach(mongoTemplate::remove);
