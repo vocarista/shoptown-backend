@@ -11,7 +11,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @Document(collection = "blackList")
 public class BlackListToken {
-    @Id
-    private String _id;
     private String token;
 }

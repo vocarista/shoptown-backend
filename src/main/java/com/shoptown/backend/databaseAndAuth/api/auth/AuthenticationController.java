@@ -31,4 +31,9 @@ public class AuthenticationController {
     public ResponseEntity<String> logout(@RequestBody LogoutRequest request) {
         return ResponseEntity.ok(service.logout(request));
     }
+
+    @PostMapping("/is-username-available")
+    public ResponseEntity<Boolean> isAvailable(@RequestBody UsernameCheckRequest request) {
+        return ResponseEntity.ok(service.isAvailable(request));
+    }
 }

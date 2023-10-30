@@ -33,7 +33,7 @@ public class SecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
-                                .requestMatchers("/user/auth/authenticate", "/user/auth/register", "/products").permitAll()
+                                .requestMatchers("/user/auth/authenticate", "/user/auth/register", "/products", "/user/auth/is-username-available", "/").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationProvider(authenticationProvider)

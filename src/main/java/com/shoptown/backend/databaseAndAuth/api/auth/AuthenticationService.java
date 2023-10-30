@@ -5,6 +5,9 @@ import com.shoptown.backend.databaseAndAuth.api.repo.UserRepository;
 import com.shoptown.backend.databaseAndAuth.config.JwtService;
 import com.shoptown.backend.databaseAndAuth.service.BlackListService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +15,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +26,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final BlackListService blackListService;
+    private final MongoTemplate mongoTemplate;
 
     public AuthenticationResponse register(RegisterRequest request) {
         // Check if a user with the same username already exists.
@@ -85,5 +91,12 @@ public class AuthenticationService {
     public String logout(LogoutRequest request) {
         blackListService.addToBlackList(request.getToken());
         return "Logged out successfully";
+    }
+
+    public Boolean isAvailable(UsernameCheckRequest request) {
+        String username = request.getUsername();
+        Query query = new Query(Criteria.where("username").is(username));
+        List<User> list= mongoTemplate.find(query, User.class);
+        return list.isEmpty();
     }
 }
