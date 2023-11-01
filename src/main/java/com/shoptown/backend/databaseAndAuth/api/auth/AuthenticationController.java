@@ -1,6 +1,6 @@
 package com.shoptown.backend.databaseAndAuth.api.auth;
 
-import lombok.RequiredArgsConstructor;
+import com.shoptown.backend.databaseAndAuth.service.BlackListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user/auth")
 public class AuthenticationController {
     private final AuthenticationService service;
+    private final BlackListService blService;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(AuthenticationService authenticationService, BlackListService blService) {
         this.service = authenticationService;
+        this.blService = blService;
     }
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -39,6 +41,6 @@ public class AuthenticationController {
 
     @PostMapping("/is-token-valid")
     public ResponseEntity<Boolean> isValid(@RequestBody AuthenticationResponse request) {
-        return ResponseEntity.ok(service.isValid(request));
+        return ResponseEntity.ok(service.isValid(request) && blService.isBlackListed(request.getToken()));
     }
 }
