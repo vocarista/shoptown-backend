@@ -99,4 +99,12 @@ public class AuthenticationService {
         List<User> list= mongoTemplate.find(query, User.class);
         return list.isEmpty();
     }
+
+    public Boolean isValid(AuthenticationResponse request) {
+        String username = jwtService.extractUsername(request.getToken());
+        Query query = new Query(Criteria.where("username").is(username));
+        User user = mongoTemplate.findOne(query, User.class);
+        assert user != null;
+        return jwtService.isTokenValid(request.getToken(), user);
+    }
 }

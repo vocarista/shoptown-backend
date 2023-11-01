@@ -36,4 +36,9 @@ public class AuthenticationController {
     public ResponseEntity<Boolean> isAvailable(@RequestBody UsernameCheckRequest request) {
         return ResponseEntity.ok(service.isAvailable(request));
     }
+
+    @PostMapping("/is-token-valid")
+    public ResponseEntity<Boolean> isValid(@RequestBody AuthenticationResponse request) {
+        return ResponseEntity.ok(service.isValid(request));
+    }
 }
