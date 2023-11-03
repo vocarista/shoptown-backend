@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.User;
@@ -14,22 +13,21 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Service
 public class JwtService {
 
-    @Value("${JWT_SECRET}")
+    @Value("${spring.data.jwt.secret}")
     String secretKeyValue;
-
-    private SecretKey secretKey;
-
-    @PostConstruct
-    public void init() {
-        // Decode the base64-encoded secret key and create the SecretKey
-        byte[] secretKeyBytes = Base64.getDecoder().decode(secretKeyValue);
-        this.secretKey = Keys.hmacShaKeyFor(secretKeyBytes);
+    private final SecretKey secretKey;
+    @Autowired
+    public JwtService() {
+        this.secretKey = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
     }
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
