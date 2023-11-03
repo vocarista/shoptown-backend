@@ -88,9 +88,9 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token(jwtToken).build();
     }
 
-    public String logout(LogoutRequest request) {
+    public AuthenticationResponse logout(LogoutRequest request) {
         blackListService.addToBlackList(request.getToken());
-        return "Logged out successfully";
+        return AuthenticationResponse.builder().token("Logged out successfully").build();
     }
 
     public Boolean isAvailable(UsernameCheckRequest request) {

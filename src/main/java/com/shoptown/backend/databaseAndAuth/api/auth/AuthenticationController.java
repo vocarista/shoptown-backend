@@ -30,7 +30,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(@RequestBody LogoutRequest request) {
+    public ResponseEntity<AuthenticationResponse> logout(@RequestBody LogoutRequest request) {
         return ResponseEntity.ok(service.logout(request));
     }
 
