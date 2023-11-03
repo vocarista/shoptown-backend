@@ -22,11 +22,11 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    @Value("${spring.data.jwt.secret}")
     String secretKeyValue;
     private final SecretKey secretKey;
     @Autowired
-    public JwtService() {
+    public JwtService(@Value("${spring.data.jwt.secret}") String secretKeyValue) {
+        this.secretKeyValue = secretKeyValue;
         this.secretKey = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
     }
     public String extractUsername(String token) {
