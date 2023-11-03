@@ -26,7 +26,7 @@ public class JwtService {
     private final SecretKey secretKey;
     @Autowired
     public JwtService() {
-        String secretKeyValue = System.getenv("JWT_SECRET");
+        String secretKeyValue = "KHT5K2Oo4xTH/k5ZGABVxZXzw6Hd0o3eyKMwuNgyXmI=";
         this.secretKey = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
     }
     public String extractUsername(String token) {
