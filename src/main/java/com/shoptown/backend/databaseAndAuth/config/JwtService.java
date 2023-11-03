@@ -25,8 +25,8 @@ public class JwtService {
     String secretKeyValue;
     private final SecretKey secretKey;
     @Autowired
-    public JwtService(@Value("${spring.data.jwt.secret}") String secretKeyValue) {
-        this.secretKeyValue = secretKeyValue;
+    public JwtService() {
+        this.secretKeyValue = System.getenv("JWT_SECRET");
         this.secretKey = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
     }
     public String extractUsername(String token) {
