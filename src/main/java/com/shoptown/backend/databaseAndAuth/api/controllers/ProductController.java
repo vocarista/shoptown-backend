@@ -1,6 +1,7 @@
 package com.shoptown.backend.databaseAndAuth.api.controllers;
 
 import com.shoptown.backend.databaseAndAuth.api.models.Product;
+import com.shoptown.backend.databaseAndAuth.api.models.ProductSearchRequest;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +32,11 @@ public class ProductController {
     public ResponseEntity<List<Product>> getProducts() {
         List<Product> products = productService.getProducts();
         return ResponseEntity.ok(products);
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<List<Product>> getSearchedProducts(@RequestBody ProductSearchRequest request) {
+        return ResponseEntity.ok(productService.getSearchedProducts(request.getKeyword()));
     }
 
 }
