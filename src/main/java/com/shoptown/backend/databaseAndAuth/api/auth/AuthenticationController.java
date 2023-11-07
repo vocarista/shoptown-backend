@@ -12,12 +12,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user/auth")
 public class AuthenticationController {
     private final AuthenticationService service;
-    private final BlackListService blService;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService, BlackListService blService) {
+    public AuthenticationController(AuthenticationService authenticationService) {
         this.service = authenticationService;
-        this.blService = blService;
     }
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
@@ -41,6 +39,6 @@ public class AuthenticationController {
 
     @PostMapping("/is-token-valid")
     public ResponseEntity<Boolean> isValid(@RequestBody AuthenticationResponse request) {
-        return ResponseEntity.ok(service.isValid(request) && blService.isBlackListed(request.getToken()));
+        return ResponseEntity.ok(service.isValid(request));
     }
 }

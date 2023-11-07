@@ -103,7 +103,7 @@ public class AuthenticationService {
     public Boolean isValid(AuthenticationResponse request) {
         String username = jwtService.extractUsername(request.getToken());
         Query query = new Query(Criteria.where("username").is(username));
-        User user = mongoTemplate.findOne(query, User.class);
+        UserDetails user = mongoTemplate.findOne(query, User.class);
         assert user != null;
         return jwtService.isTokenValid(request.getToken(), user);
     }
