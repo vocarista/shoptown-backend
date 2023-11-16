@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -91,5 +92,19 @@ public class CartController {
         Update update = new Update().set("cartlist", cartlist);
         mongoTemplate.updateFirst(query, update, User.class);
         return ResponseEntity.ok("Product deleted successfully");
+    }
+
+    @DeleteMapping("/empty")
+    public ResponseEntity<String> removeAll(@AuthenticationPrincipal UserDetails userDetails) {
+        try {
+            String username = userDetails.getUsername();
+            Query query = new Query(Criteria.where("username").is(username));
+            Update update = new Update().unset("cartlist");
+            mongoTemplate.updateFirst(query, update, User.class);
+            return ResponseEntity.noContent().build(); // 204 No Content
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error deleting cart: " + e.getMessage());
+        }
     }
 }
