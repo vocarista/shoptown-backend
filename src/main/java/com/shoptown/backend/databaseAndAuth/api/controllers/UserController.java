@@ -66,6 +66,11 @@ public class UserController {
         return updateField(userDetails, "dob", newDob);
     }
 
+    @PostMapping("/update/username")
+    public ResponseEntity<?> updateUsername (@AuthenticationPrincipal UserDetails userDetails, @RequestBody String newUsername) {
+        return updateField(userDetails, "username", newUsername);
+    }
+
     private ResponseEntity<?> updateField(UserDetails userDetails, String fieldName, Object newValue) {
         String username = userDetails.getUsername();
         Query query = new Query(Criteria.where("username").is(username));

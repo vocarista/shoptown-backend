@@ -93,18 +93,18 @@ public class AuthenticationService {
         return AuthenticationResponse.builder().token("Logged out successfully").build();
     }
 
-    public Boolean isAvailable(UsernameCheckRequest request) {
-        String username = request.getUsername();
+    public Boolean isAvailable(String request) {
+        String username = request;
         Query query = new Query(Criteria.where("username").is(username));
         List<User> list= mongoTemplate.find(query, User.class);
         return list.isEmpty();
     }
 
-    public Boolean isValid(AuthenticationResponse request) {
-        String username = jwtService.extractUsername(request.getToken());
+    public Boolean isValid(String request) {
+        String username = jwtService.extractUsername(request);
         Query query = new Query(Criteria.where("username").is(username));
         UserDetails user = mongoTemplate.findOne(query, User.class);
         assert user != null;
-        return jwtService.isTokenValid(request.getToken(), user);
+        return jwtService.isTokenValid(request, user);
     }
 }

@@ -33,12 +33,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/is-username-available")
-    public ResponseEntity<Boolean> isAvailable(@RequestBody UsernameCheckRequest request) {
+    public ResponseEntity<Boolean> isAvailable(@RequestBody String request) {
         return ResponseEntity.ok(service.isAvailable(request));
     }
 
     @PostMapping("/is-token-valid")
-    public ResponseEntity<Boolean> isValid(@RequestBody AuthenticationResponse request) {
+    public ResponseEntity<Boolean> isValid(@RequestBody String request) {
         return ResponseEntity.ok(service.isValid(request));
     }
 }
