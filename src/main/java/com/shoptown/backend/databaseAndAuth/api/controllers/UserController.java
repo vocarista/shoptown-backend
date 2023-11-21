@@ -63,8 +63,8 @@ public class UserController {
     }
 
     @PostMapping("/update/dob")
-    public ResponseEntity<?> updateDob(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateRequest newDob) {
-        return updateField(userDetails, "dob", Date.parse(newDob.getValue()));
+    public ResponseEntity<?> updateDob(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Date newDob) {
+        return updateField(userDetails, "dob", newDob);
     }
 
     @PostMapping("/update/username")
