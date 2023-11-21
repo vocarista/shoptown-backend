@@ -1,5 +1,6 @@
 package com.shoptown.backend.databaseAndAuth.api.auth;
 
+import com.shoptown.backend.databaseAndAuth.api.models.TokenRequest;
 import com.shoptown.backend.databaseAndAuth.service.BlackListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/is-token-valid")
-    public ResponseEntity<Boolean> isValid(@RequestBody String request) {
+    public ResponseEntity<Boolean> isValid(@RequestBody TokenRequest request) {
         return ResponseEntity.ok(service.isValid(request));
     }
 }

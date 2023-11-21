@@ -1,5 +1,6 @@
 package com.shoptown.backend.databaseAndAuth.api.auth;
 
+import com.shoptown.backend.databaseAndAuth.api.models.TokenRequest;
 import com.shoptown.backend.databaseAndAuth.api.models.User;
 import com.shoptown.backend.databaseAndAuth.api.repo.UserRepository;
 import com.shoptown.backend.databaseAndAuth.config.JwtService;
@@ -94,17 +95,16 @@ public class AuthenticationService {
     }
 
     public Boolean isAvailable(String request) {
-        String username = request;
-        Query query = new Query(Criteria.where("username").is(username));
+        Query query = new Query(Criteria.where("username").is(request));
         List<User> list= mongoTemplate.find(query, User.class);
         return list.isEmpty();
     }
 
-    public Boolean isValid(String request) {
-        String username = jwtService.extractUsername(request);
+    public Boolean isValid(TokenRequest request) {
+        String username = jwtService.extractUsername(request.getToken());
         Query query = new Query(Criteria.where("username").is(username));
-        UserDetails user = mongoTemplate.findOne(query, User.class);
+        User user = mongoTemplate.findOne(query, User.class);
         assert user != null;
-        return jwtService.isTokenValid(request, user);
+        return jwtService.isTokenValid(request.getToken(), user);
     }
 }

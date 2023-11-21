@@ -1,5 +1,6 @@
 package com.shoptown.backend.databaseAndAuth.api.controllers;
 
+import com.shoptown.backend.databaseAndAuth.api.models.UpdateRequest;
 import com.shoptown.backend.databaseAndAuth.api.models.User;
 import org.apache.coyote.Response;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -36,39 +37,39 @@ public class UserController {
     }
 
     @PostMapping("/update/firstname")
-    public ResponseEntity<?> updateFirstName(@AuthenticationPrincipal UserDetails userDetails, @RequestBody String newFirstName) {
-        return updateField(userDetails, "firstname", newFirstName);
+    public ResponseEntity<?> updateFirstName(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateRequest newFirstName) {
+        return updateField(userDetails, "firstname", newFirstName.getValue());
     }
 
     @PostMapping("/update/lastname")
-    public ResponseEntity<?> updateLastName(@AuthenticationPrincipal UserDetails userDetails, @RequestBody String newLastName) {
-        return updateField(userDetails, "lastname", newLastName);
+    public ResponseEntity<?> updateLastName(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateRequest newLastName) {
+        return updateField(userDetails, "lastname", newLastName.getValue());
     }
 
     @PostMapping("/update/password")
-    public ResponseEntity<?> updatePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestBody String newPassword) {
-        String newPass = passwordEncoder.encode(newPassword);
+    public ResponseEntity<?> updatePassword(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateRequest newPassword) {
+        String newPass = passwordEncoder.encode(newPassword.getValue());
         return updateField(userDetails, "password", newPass);
     }
 
     @PostMapping("/update/email")
-    public ResponseEntity<?> updateEmail(@AuthenticationPrincipal UserDetails userDetails, @RequestBody String newEmail) {
-        return updateField(userDetails, "email", newEmail);
+    public ResponseEntity<?> updateEmail(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateRequest newEmail) {
+        return updateField(userDetails, "email", newEmail.getValue());
     }
 
     @PostMapping("/update/phone")
-    public ResponseEntity<?> updatePhone(@AuthenticationPrincipal UserDetails userDetails, @RequestBody String newPhone) {
-        return updateField(userDetails, "phone", newPhone);
+    public ResponseEntity<?> updatePhone(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateRequest newPhone) {
+        return updateField(userDetails, "phone", newPhone.getValue());
     }
 
     @PostMapping("/update/dob")
-    public ResponseEntity<?> updateDob(@AuthenticationPrincipal UserDetails userDetails, @RequestBody Date newDob) {
-        return updateField(userDetails, "dob", newDob);
+    public ResponseEntity<?> updateDob(@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateRequest newDob) {
+        return updateField(userDetails, "dob", Date.parse(newDob.getValue()));
     }
 
     @PostMapping("/update/username")
-    public ResponseEntity<?> updateUsername (@AuthenticationPrincipal UserDetails userDetails, @RequestBody String newUsername) {
-        return updateField(userDetails, "username", newUsername);
+    public ResponseEntity<?> updateUsername (@AuthenticationPrincipal UserDetails userDetails, @RequestBody UpdateRequest newUsername) {
+        return updateField(userDetails, "username", newUsername.getValue());
     }
 
     private ResponseEntity<?> updateField(UserDetails userDetails, String fieldName, Object newValue) {
