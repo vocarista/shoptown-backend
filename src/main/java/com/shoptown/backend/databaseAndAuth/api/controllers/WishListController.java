@@ -76,4 +76,18 @@ public class WishListController {
         mongoTemplate.updateFirst(query, update, User.class);
         return ResponseEntity.ok("Product deleted successfully");
     }
+
+    @PostMapping("/is-wishlisted")
+    public ResponseEntity<?> isWishlisted(@AuthenticationPrincipal UserDetails userDetails, @RequestBody String id) {
+        String username = userDetails.getUsername();
+        Query query = new Query(Criteria.where("username").is(username));
+        User user = mongoTemplate.findOne(query, User.class);
+        assert user != null;
+        List<WishlistProduct> wishlist = user.getWishlist();
+        if (wishlist.contains(new WishlistProduct(id))) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
+    }
 }
