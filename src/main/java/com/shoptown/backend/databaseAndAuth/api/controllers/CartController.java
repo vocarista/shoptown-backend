@@ -84,7 +84,7 @@ public class CartController {
     @PostMapping("/remove")
     public ResponseEntity<String> removeItem(@AuthenticationPrincipal UserDetails userDetails, @RequestBody DeleteRequest request) {
         String username = userDetails.getUsername();
-        Query query = new Query(Criteria.where("uername").is(username));
+        Query query = new Query(Criteria.where("username").is(username));
         User user = mongoTemplate.findOne(query, User.class);
         assert user != null;
         List<CartProduct> cartlist = user.getCartlist();
