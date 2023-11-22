@@ -18,11 +18,6 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
     private ProductService productService;
-//    @PostMapping("/")
-//    public ResponseEntity<?> addProduct(@RequestBody Product product) {
-//        Product save = this.productRepository.save(product);
-//        return ResponseEntity.ok(save);
-//    }
 
     @Autowired
     public ProductController(ProductService productservice) {
