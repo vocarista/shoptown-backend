@@ -45,7 +45,7 @@ public class OrderController {
     }
 
     @PostMapping("/add-to-orders")
-    public ResponseEntity<String> addItem(@AuthenticationPrincipal UserDetails userDetails, @RequestBody OrderProduct request) {
+    public ResponseEntity<String> addItem(@AuthenticationPrincipal UserDetails userDetails, @RequestBody List<OrderProduct> request) {
         String username = userDetails.getUsername();
         Query query = new Query(Criteria.where("username").is(username));
         User user = mongoTemplate.findOne(query, User.class);
@@ -55,7 +55,7 @@ public class OrderController {
         if (orderlist == null) {
             orderlist = new ArrayList<OrderProduct>();
         }
-        orderlist.add(request);
+        orderlist.addAll(request);
         Update update = new Update().set("orderlist", orderlist);
         mongoTemplate.updateFirst(query, update, User.class);
 
